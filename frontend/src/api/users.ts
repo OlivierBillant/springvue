@@ -1,15 +1,24 @@
 import axios from 'axios'
 
-const USERNAME = 'user'
-const PASSWORD = '2142c07e-ed8d-4e95-b2c8-6f2972d38449' // Replace this with actual value
+const BASE_URL = 'http://localhost:8080/users'
+const AUTH = {
+  username: 'user',
+  password: '8cf818aa-6c59-4e4d-b10d-a96e2c7a156c'
+}
 
 export const getUsers = async () => {
-  const response = await axios.get('http://localhost:8080/users', {
-    auth: {
-      username: USERNAME,
-      password: PASSWORD
-    },
-    withCredentials: true
+  const response = await axios.get(BASE_URL, {
+    auth: AUTH
+  })
+  return response.data
+}
+
+export const createUser = async (name: string) => {
+  const response = await axios.post(BASE_URL, { name }, {
+    auth: AUTH,
+    headers: {
+      'Content-Type': 'application/json'
+    }
   })
   return response.data
 }

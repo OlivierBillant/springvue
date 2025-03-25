@@ -1,22 +1,29 @@
 package com.demo.springvue.controller;
 
 import com.demo.springvue.entity.User;
-import com.demo.springvue.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.demo.springvue.service.UserService;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:5173") // Allow Vue frontend
 public class UserController {
-    @Autowired
-    private UserRepository repository;
-    
+
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping
     public List<User> getAllUsers() {
-        return repository.findAll();
+        return userService.getAllUsers();
+    }
+
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return userService.save(user);
     }
 }
