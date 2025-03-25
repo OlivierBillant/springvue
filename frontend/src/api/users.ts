@@ -1,24 +1,35 @@
 import axios from 'axios'
 
 const BASE_URL = 'http://localhost:8080/users'
-const AUTH = {
-  username: 'user',
-  password: '8cf818aa-6c59-4e4d-b10d-a96e2c7a156c'
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('jwt')
+  if (!token) throw new Error('JWT token missing')
+  return {
+    Authorization: `Bearer ${token}`
+  }
 }
 
 export const getUsers = async () => {
-  const response = await axios.get(BASE_URL, {
-    auth: AUTH
+  console.log('JWT:', localStorage.getItem('jwt'))
+  const res = await axios.get(BASE_URL, {
+    headers: getAuthHeaders(),
+    withCredentials: true
   })
-  return response.data
+  return res.data
 }
 
 export const createUser = async (name: string) => {
-  const response = await axios.post(BASE_URL, { name }, {
-    auth: AUTH,
-    headers: {
-      'Content-Type': 'application/json'
+  const res = await axios.post(
+    BASE_URL,
+    { name },
+    {
+      headers: {
+        ...getAuthHeaders(),
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
     }
-  })
-  return response.data
+  )
+  return res.data
 }

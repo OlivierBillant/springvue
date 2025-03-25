@@ -1,14 +1,24 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
 import UserList from './components/UserList.vue'
+import Login from './components/Login.vue'
 
+const isLoggedIn = !!localStorage.getItem('jwt')
+
+const logout = () => {
+  window.localStorage.removeItem('jwt')
+  window.location.reload()
+}
 </script>
 
 <template>
-  <div id="app">
-    <h1>Spring + Vue App</h1>
-    <UserList />
+  <div>
+    <Login v-if="!isLoggedIn" />
+    <UserList v-else />
+    <button @click="logout">Logout</button>
+
   </div>
+  
   <div>
     <a href="https://vite.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
